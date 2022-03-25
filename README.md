@@ -10,15 +10,7 @@ Requirements:
 - python-dateutil
 - selenium
 - pillow (PIL)
-- PhantomJS Binary (Automatically Download, but `libfontconfig` is dependency on Linux)
-
-## Install
-
-Install package with pip:
-
-```bash
-pip install -U simple_bank_korea
-```
+- webdriver_manager (using Chrome)
 
 ## KB (Kookmin Bank)
 
@@ -49,7 +41,6 @@ transaction_list = get_transactions(
         birthday='941021',
         password='5432',
         # days=30, # Optional, default is 30
-        # PHANTOM_PATH='/Users/beomi/bin/phantomjs', # Optional, default is 'phantomjs' only.
         # LOG_PATH='/Users/beomi/phantom.log' # Optional, default is os.path.devnull (no log)
     )
 
@@ -68,10 +59,6 @@ for trs in transaction_list:
 #### Optional Args
 
 - `days`: Days you want to get datas. Default is 30 days. (Integer)
-- `PHANTOM_PATH`: Your PhantomJS Binary file Location. 
-  Default is 'phantomjs', expecting registered in PATH. 
-  (If `phantomjs` is not in PATH, automatically download)
-- `LOG_PATH`: Path for phantomjs log file. Default is no logging.
 
 #### Return types
 
@@ -87,29 +74,12 @@ for trs in transaction_list:
 
 ## Update Log
 
-#### 0.2.15 (2020-06-04)
+Forked from Beomi/simple_bank_korea
 
-- HotFix bugs on `setup.py`
-
-#### 0.2.14 (2020-06-04)
-
-- Fix bugs #4: (downloaded) phantomJS permission error
-
-#### 0.2.13 (2020-06-04)
-
-- Fix bugs when downloading phantomjs.
-    - Fix affects on Linux and macOS only.
-- Add Guide(OS, Progress) when dowloading phantomjs.
-
-#### 0.2.10 (2017-11-11)
-
-- Hot-fix: implicitly import to explicit relevant import to prevent `ImportError`
-
-#### 0.2.9 (2017-11-11)
-
-- Download PhantomJS Binary if `phantomjs` is not in PATH
-
-#### 0.2.8 (2017-09-18)
-
-- Add caching strategy (using temp folder with saving touch-keys)
-- Fix typo in v0.2.7
+0.0.1 (2022-03-25)
+- Changed to Chrome because PhantomJS is deprecated and Selenium is no longer supports PhantomJS)
+- Thanks to @goldiutl at original repository's issue section, processing screenshot (for virtual keypad) adapted for Chrome.
+- Added WebDriverWait, because the script crawls even at the loading screen.
+- Added ChromeDriverManager in case of not existing chromedriver, and responded to to-be depreciated executable_path stuff
+- In case of no transaction log, added try / except at parsing date. If no transactions, get_transaction function returns string "내역 없음"
+- Removed PhantomJS related script, because it is used no more.
