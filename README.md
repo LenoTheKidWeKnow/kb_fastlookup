@@ -1,7 +1,7 @@
 # KB Fastlookup [![PyPI version](https://badge.fury.io/py/simple-bank-korea.svg)](https://badge.fury.io/py/simple-bank-korea) [![Build Status](https://travis-ci.org/Beomi/simple_bank_korea.svg?branch=master)](https://travis-ci.org/Beomi/simple_bank_korea) [![codecov.io](https://codecov.io/github/Beomi/simple_bank_korea/coverage.svg?branch=master)](https://codecov.io/github/Beomi/simple_bank_korea?branch=master)
 
 
-## Simplest Transaction Crawler for Korea Banks
+## Simplest Transaction Crawler for KB Kookmin Bank
 ## Original Repository by @Beomi
 
 Requirements:
