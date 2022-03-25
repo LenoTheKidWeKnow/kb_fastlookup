@@ -9,13 +9,13 @@ def get_requires():
     reqpath = os.path.join(thisdir, REQ_FILE)
     return [line.rstrip('\n') for line in open(reqpath)]
 
-setup(name='simple_bank_korea',
+setup(name='kb_fastlookup',
       version=VERSION,
-      url='https://github.com/beomi/simple_bank_korea',
+      url='https://github.com/LenoTheKidWeKnow/kb_fastlookup',
       license='MIT',
-      author='Junbum Lee',
-      author_email='jun@beomi.net',
-      description='Crawling Korea bank transactions',
+      author='Lenorandum',
+      author_email='kimbh4932@gmail.com',
+      description='Crawling KB Kookmin Bank transactions',
       packages=find_packages(),
       long_description=open('README.md', 'r', encoding="utf-8").read(),
       long_description_content_type="text/markdown",
