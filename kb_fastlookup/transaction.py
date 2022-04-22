@@ -222,58 +222,78 @@ def get_transactions(bank_num, birthday, password, days=30,
             ('page', 'C025255'),
             ('cc', 'b028702:b028770'),
         )
-
-        data = [
-            ('KEYPAD_TYPE_{}'.format(KEYMAP), '3'),
-            ('KEYPAD_HASH_{}'.format(KEYMAP), hexed_pw),
-            ('KEYPAD_USEYN_{}'.format(KEYMAP), KEYPAD_USEYN),
-            ('KEYPAD_INPUT_{}'.format(KEYMAP), '\uBE44\uBC00\uBC88\uD638'),
-            ('signed_msg', ''),
-            ('\uC694\uCCAD\uD0A4', ''),
-            ('\uACC4\uC88C\uBC88\uD638', bank_num),
-            ('\uC870\uD68C\uC2DC\uC791\uC77C\uC790', month_before_all),
-            ('\uC870\uD68C\uC885\uB8CC\uC77C', this_all),
-            ('\uACE0\uAC1D\uC2DD\uBCC4\uBC88\uD638', ''),
-            ('\uBE60\uB978\uC870\uD68C', 'Y'),
-            ('\uC870\uD68C\uACC4\uC88C', bank_num),
-            ('\uBE44\uBC00\uBC88\uD638', password),
-            ('USEYN_CHECK_NAME_{}'.format(KEYMAP), 'Y'),
-            ('\uAC80\uC0C9\uAD6C\uBD84', '2'),
-            ('\uC8FC\uBBFC\uC0AC\uC5C5\uC790\uBC88\uD638', birthday),
-            ('\uC870\uD68C\uC2DC\uC791\uB144', month_before_year),
-            ('\uC870\uD68C\uC2DC\uC791\uC6D4', month_before_month),
-            ('\uC870\uD68C\uC2DC\uC791\uC77C', month_before_day),
-            ('\uC870\uD68C\uB05D\uB144', this_year),
-            ('\uC870\uD68C\uB05D\uC6D4', this_month),
-            ('\uC870\uD68C\uB05D\uC77C', this_day),
-            ('\uC870\uD68C\uAD6C\uBD84', '2'),
-            ('\uC751\uB2F5\uBC29\uBC95', '2'),
-        ]
-
-        r = requests.post('https://obank.kbstar.com/quics', headers=headers, params=params, cookies=cookies, data=data)
-
-        soup = bs(r.text, 'html.parser')
-
-        transactions = soup.select('#pop_contents > table.tType01 > tbody > tr')
         transaction_list = []
+        while True:
+            data = [
+                ('KEYPAD_TYPE_{}'.format(KEYMAP), '3'),
+                ('KEYPAD_HASH_{}'.format(KEYMAP), hexed_pw),
+                ('KEYPAD_USEYN_{}'.format(KEYMAP), KEYPAD_USEYN),
+                ('KEYPAD_INPUT_{}'.format(KEYMAP), '\uBE44\uBC00\uBC88\uD638'),
+                ('signed_msg', ''),
+                ('\uC694\uCCAD\uD0A4', ''),
+                ('\uACC4\uC88C\uBC88\uD638', bank_num),
+                ('\uC870\uD68C\uC2DC\uC791\uC77C\uC790', month_before_all),
+                ('\uC870\uD68C\uC885\uB8CC\uC77C', this_all),
+                ('\uACE0\uAC1D\uC2DD\uBCC4\uBC88\uD638', ''),
+                ('\uBE60\uB978\uC870\uD68C', 'Y'),
+                ('\uC870\uD68C\uACC4\uC88C', bank_num),
+                ('\uBE44\uBC00\uBC88\uD638', password),
+                ('USEYN_CHECK_NAME_{}'.format(KEYMAP), 'Y'),
+                ('\uAC80\uC0C9\uAD6C\uBD84', '2'),
+                ('\uC8FC\uBBFC\uC0AC\uC5C5\uC790\uBC88\uD638', birthday),
+                ('\uC870\uD68C\uC2DC\uC791\uB144', month_before_year),
+                ('\uC870\uD68C\uC2DC\uC791\uC6D4', month_before_month),
+                ('\uC870\uD68C\uC2DC\uC791\uC77C', month_before_day),
+                ('\uC870\uD68C\uB05D\uB144', this_year),
+                ('\uC870\uD68C\uB05D\uC6D4', this_month),
+                ('\uC870\uD68C\uB05D\uC77C', this_day),
+                ('\uC870\uD68C\uAD6C\uBD84', '2'),
+                ('\uC751\uB2F5\uBC29\uBC95', '2'),
+            ]
 
-        for idx, value in enumerate(transactions):
-            tds = value.select('td')
-            if not idx % 2:
-                _date = tds[0].text
-                _date = _date[:10] + ' ' + _date[10:]
-                try:
-                    date = parser.parse(_date)  # 날짜: datetime
-                except:
-                    return "내역 없음"
-                amount = -int(tds[3].text.replace(',', '')) or int(tds[4].text.replace(',', ''))  # 입금 / 출금액: int
-                balance = int(tds[5].text.replace(',', ''))  # 잔고: int
-                detail = dict(date=date, amount=amount, balance=balance)
+            r = requests.post('https://obank.kbstar.com/quics', headers=headers, params=params, cookies=cookies, data=data)
+            soup = bs(r.text, 'html.parser')
+
+            transactions = soup.select('#pop_contents > table.tType01 > tbody > tr')
+            if len(transactions) >= 200:
+                tdn = transactions[-2].select('td')
+                yes = tdn[0].text
+                yes = yes[:10] + ' ' + yes[10:]
+                _yse = parser.parse(yes)
+                this_year = _yse.strftime('%Y')
+                this_month = _yse.strftime('%m')
+                this_day = _yse.strftime('%d')
+                this_all = _yse.strftime('%Y%m%d')
+                breakthrough = False
             else:
-                transaction_by = tds[0].text.strip()  # 거래자(입금자 등): str
-                tmp = dict(transaction_by=transaction_by)
-                transaction_list.append({**detail, **tmp})
-        return transaction_list
+                breakthrough = True
+
+            for idx, value in enumerate(transactions):
+                tds = value.select('td')
+                if not idx % 2:
+                    _date = tds[0].text
+                    _date = _date[:10] + ' ' + _date[10:]
+                    try:
+                        date = parser.parse(_date)  # 날짜: datetime
+                    except:
+                        return "내역 없음"
+                    amount = -int(tds[3].text.replace(',', '')) or int(tds[4].text.replace(',', ''))  # 입금 / 출금액: int
+                    balance = int(tds[5].text.replace(',', ''))  # 잔고: int
+                    detail = dict(date=date, amount=amount, balance=balance)
+                else:
+                    transaction_by = tds[0].text.strip()  # 거래자(입금자 등): str
+                    tmp = dict(transaction_by=transaction_by)
+                    transaction_list.append({**detail, **tmp})
+                    
+            if breakthrough == True:
+                break
+            else:
+                continue
+        newlist = []
+        for x in transaction_list:
+            if x not in newlist:
+                newlist.append(x)
+        return newlist
 
     # Caching
     VIRTUAL_KEYPAD_INFO_JSON = os.path.join(TMP_DIR, 'kb_{}.json'.format(bank_num))
