@@ -77,6 +77,9 @@ for trs in transaction_list:
 
 Forked from Beomi/simple_bank_korea
 
+0.1.0 (2022-04-22)
+- Append next page list if transaction list > 100.
+
 0.0.1 (2022-03-25)
 - Changed to Chrome because PhantomJS is deprecated and Selenium is no longer supports PhantomJS)
 - Thanks to @goldiutl at original repository's issue section, processing screenshot (for virtual keypad) adapted for Chrome.
