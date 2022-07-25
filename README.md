@@ -41,7 +41,8 @@ transaction_list = get_transactions(
         bank_num='47380204123456',
         birthday='941021',
         password='5432',
-        # days=30, # Optional, default is 30
+        # days=30, # Optional, default is 30,
+        # start_date = '20220701' #optional, you must use 'yyyymmdd' style.
         # LOG_PATH='/Users/beomi/phantom.log' # Optional, default is os.path.devnull (no log)
     )
 
@@ -60,6 +61,7 @@ for trs in transaction_list:
 #### Optional Args
 
 - `days`: Days you want to get datas. Default is 30 days. (Integer)
+- `start_date`: (If not None, start_date is used first) The date you want to get transactions from. There is high chance of no result if you set start_date over a year ago.
 
 #### Return types
 
@@ -76,6 +78,10 @@ for trs in transaction_list:
 ## Update Log
 
 Forked from Beomi/simple_bank_korea
+
+0.2.0 (2022-07-25)
+- Instead of "내역 없음" string, the function just skips and continues.
+- Added date, so you can search any date you want. But if the date is a year ago, there is a high chance of no results.
 
 0.1.0 (2022-04-22)
 - Append next page list if transaction list > 100.
