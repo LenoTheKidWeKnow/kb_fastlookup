@@ -81,7 +81,7 @@ Forked from Beomi/simple_bank_korea
 
 0.2.0 (2022-07-25)
 - Instead of "내역 없음" string, the function just skips and continues.
-- Added date, so you can search any date you want. But if the date is a year ago, there is a high chance of no results.
+- Added date, so you can search any date you want. But if the start date is over a year ago, there is a high chance of no results.
 
 0.1.0 (2022-04-22)
 - Append next page list if transaction list > 100.
