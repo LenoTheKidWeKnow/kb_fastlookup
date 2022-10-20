@@ -79,6 +79,9 @@ for trs in transaction_list:
 
 Forked from Beomi/simple_bank_korea
 
+0.3.0 (2022-10-20)
+- Changed WebDriver Module Selenium to Playwright (Speed up almost 9 times) -> look at transaction_playwright.py
+
 0.2.0 (2022-07-25)
 - Instead of "내역 없음" string, the function just skips and continues.
 - Added date, so you can search any date you want. But if the start date is over a year ago, there is a high chance of no results.
