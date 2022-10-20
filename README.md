@@ -9,8 +9,11 @@ Requirements:
 - bs4 (BeautifulSoup4)
 - requests
 - python-dateutil
-- selenium
 - pillow (PIL)
+- playwright
+
+Below is needed when you use original script (transaction.py)
+- selenium
 - webdriver_manager (using Chrome)
 
 ## KB (Kookmin Bank)
