@@ -40,7 +40,7 @@ def get_keypad_img():
                 try:
                     page.wait_for_selector('xpath=//*[@id="loading_img"]', state='detached', timeout=10000)
                     break
-                except TimeoutError:
+                except:
                     page.goto('https://obank.kbstar.com/quics?page=C025255&cc=b028364:b028702&QSL=F')
                     retries += 1
         cookies = context.cookies()
